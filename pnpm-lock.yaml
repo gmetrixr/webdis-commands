@@ -9,10 +9,12 @@ specifiers:
   superagent-prefix: ^0.0.2
   ts-node: ^10.2.0
   typescript: ^4.3.5
+  uuid: ^8.3.2
 
 dependencies:
   superagent: 6.1.0
   superagent-prefix: 0.0.2
+  uuid: 8.3.2
 
 devDependencies:
   '@typescript-eslint/eslint-plugin': 4.33.0_cc617358c89d3f38c52462f6d809db4c
@@ -1256,6 +1258,11 @@ packages:
 
   /util-deprecate/1.0.2:
     resolution: {integrity: sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=}
+    dev: false
+
+  /uuid/8.3.2:
+    resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
+    hasBin: true
     dev: false
 
   /v8-compile-cache/2.3.0:
