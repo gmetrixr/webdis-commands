@@ -1,24 +1,20 @@
-import request from "superagent";
-import prefix from "superagent-prefix";
 import Commander from "./commander";
 import Subscriber from "./subscriber";
 
 class Webdis {
   private readonly prefixedUrl: string;
   private readonly dbIndex?: number;
-  private readonly agent: request.SuperAgentStatic & request.Request;
   private readonly commander: Commander;
   private subscriptions: Record<string, Subscriber>;
 
-  constructor(url: string, dbIndex?: number) {
-    this.dbIndex = dbIndex;
-    this.prefixedUrl = this.dbIndex? `${url}/${this.dbIndex}`: url;
-    this.agent = request.agent().use(prefix(this.prefixedUrl));
-    this.commander = new Commander(this.agent);
+  constructor(url: string, db?: number) {
+    this.dbIndex = db;
+    this.prefixedUrl = this.dbIndex !== undefined? `${url}/${this.dbIndex}`: url;
+    this.commander = new Commander(url, db);
     this.subscriptions = {};
   }
 
-  getCommander() {
+  command() {
     return this.commander;
   }
 
@@ -45,7 +41,11 @@ class Webdis {
   }
 
   async publish(channel: string, message: string) {
-    
+
+  }
+
+  async quit(cb: any) {
+
   }
 }
 

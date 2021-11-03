@@ -1,83 +1,124 @@
 import request from "superagent";
+import prefix from "superagent-prefix";
+
+type Ok = "OK";
+const Ok = "OK";
 
 class Commander {
   private readonly agent: request.SuperAgentStatic & request.Request;
-  constructor(agent: request.SuperAgentStatic & request.Request) {
-    this.agent = agent;
+  private db?: number;
+
+  constructor(url: string, db?: number) {
+    this.db = db;
+    this.agent = request
+      .agent()
+      .use(prefix(url))
+      .accept("json");
   }
 
-  async set(key: string, value: any) {
-    return await this.agent.get(`/SADD/${key}/${value}`);
+  private makeCommand(command: string) {
+    return this.db? `${this.db}/${command}`: command;
   }
 
-  async get(key: string) {
-    return await this.agent.get(`/GET/${key}`);
+  async call(url: string): Promise<any> {
+    try {
+      const res = await this.agent.post("/").send(this.makeCommand(url));
+      return res.body;
+    } catch {
+      return 0;
+    }
   }
 
-  async del(key: string) {
-    return await this.agent.get(`/DEL/${key}`);
+  async set(key: string, value: string): Promise<Ok | null> {
+    const res = await this.call(`SET/${key}/${value}`);
+    return res === 0? null: Ok;
   }
 
-  async exists(key: string) {
-    return await this.agent.get(`/EXISTS/${key}`);
+  async get(key: string): Promise<string | null> {
+    const res = await this.call(`GET/${key}`);
+    return res === 0? null: res.GET;
   }
 
-  async sadd(key: string, value: string) {
-    return await this.agent.get(`/SADD/${key}/${value}`);
+  async del(key: string): Promise<number | null> {
+    const res = await this.call(`/DEL/${key}`);
+    return res === 0? null: res.DEL;
   }
 
-  async srem(key: string, value: string) {
-    return await this.agent.get(`/SREM/${key}/${value}`);
+  async exists(key: string): Promise<number | null> {
+    const res = await this.call(`/EXISTS/${key}`);
+    return res === 0? null: res.EXISTS;
   }
 
-  async smember(key: string) {
-    return await this.agent.get(`/SMEMBERS/${key}`);
+  async sadd(key: string, value: string): Promise<number | null> {
+    const res = await this.call(`/SADD/${key}/${value}`);
+    return res === 0? null: res.SADD;
   }
 
-  async hset(name: string, key: string, value: any) {
-    return await this.agent.get(`/HSET/${name}/${key}/${value}`);
+  async srem(key: string, value: string): Promise<number | null> {
+    const res = await this.call(`/SREM/${key}/${value}`);
+    return res === 0? null: res.SREM;
   }
 
-  async hget(name: string, key: string) {
-    return await this.agent.get(`/HGET/${name}/${key}`);
+  async smember(key: string): Promise<null | any[]> {
+    const res = await this.call(`/SMEMBERS/${key}`);
+    return res === 0? null: res.SMEMBERS;
   }
 
-  async hgetall(name: string) {
-    return await this.agent.get(`/HGETALL/${name}`);
+  async hset(name: string, key: string, value: any): Promise<number | null> {
+    const res = await this.call(`/HSET/${name}/${key}/${value}`);
+    return res === 0? null: res.HSET;
   }
 
-  async hmset(name: string, key: string, value: any) {
-    return await this.agent.get(`/HMSET/${name}/${key}/${value}`);
+  async hget(name: string, key: string): Promise<any | null> {
+    const res = await this.call(`/HGET/${name}/${key}`);
+    return res === 0? null: res.HGET;
   }
 
-  async hmget(name: string, key: string) {
-    return await this.agent.get(`/HMGET/${name}/${key}`);
+  async hgetall(name: string): Promise<any | null> {
+    const res = await this.call(`/HGETALL/${name}`);
+    return res === 0? null: res.HGETALL;
   }
 
-  async hdel(name: string, key: string) {
-    return await this.agent.get(`/HDEL/${name}/${key}`);
+  async hmset(name: string, key: string, value: any): Promise<any[] | null> {
+    const res = await this.call(`/HMSET/${name}/${key}/${value}`);
+    return res === 0? null: res.HMSET;
   }
 
-  async sismember(name: string, key: string) {
-    return await this.agent.get(`/SISMEMBER/${name}/${key}`);
+  async hmget(name: string, key: string): Promise<any[] | null> {
+    const res = await this.call(`/HMGET/${name}/${key}`);
+    return res === 0? null: res.HMGET;
   }
 
-  async expire(key: string, value: number) {
-    return await this.agent.get(`/EXPIRE/${key}/${value}`);
+  async hdel(name: string, key: string): Promise<number | null> {
+    const res = await this.call(`/HDEL/${name}/${key}`);
+    return res === 0? null: res.HDEL;
   }
-  async keys(key: string) {
-    return await this.agent.get(`/KEYS/${key}`);
+
+  async sismember(name: string, key: string): Promise<number | null> {
+    const res = await this.call(`/SISMEMBER/${name}/${key}`);
+    return res === 0? null: res.SISMEMBER;
+  }
+
+  async expire(key: string, value: number): Promise<number | null> {
+    const res = await this.call(`/EXPIRE/${key}/${value}`);
+    return res === 0? null: res.EXPIRE;
+  }
+
+  async keys(key: string): Promise<any[] | null> {
+    const res = await this.call(`/KEYS/${key}`);
+    return res === 0? null: res.KEYS;
   }
 
   // utility
-  async flushdb() {
-    return await this.agent.get(`/FLUSHDB`);
+  async flushdb(): Promise<any[] | null> {
+    const res = await this.call(`/FLUSHDB`);
+    return res === 0? null: res.FLUSHDB;
   }
 
-  async flushall() {
-    return await this.agent.get(`/FLUSHALL`);
+  async flushall(): Promise<any[] | null> {
+    const res = await this.call(`/FLUSHALL`);
+    return res === 0? null: res.FLUSHALL;
   }
-
 }
 
 export default Commander;

@@ -1,6 +1,9 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@types/superagent': ^4.1.13
+  '@types/superagent-prefix': ^0.0.3
+  '@types/uuid': ^8.3.1
   '@typescript-eslint/eslint-plugin': ^4.1.0
   '@typescript-eslint/parser': ^4.11.0
   eslint: ^7.9.0
@@ -17,6 +20,9 @@ dependencies:
   uuid: 8.3.2
 
 devDependencies:
+  '@types/superagent': 4.1.13
+  '@types/superagent-prefix': 0.0.3
+  '@types/uuid': 8.3.1
   '@typescript-eslint/eslint-plugin': 4.33.0_cc617358c89d3f38c52462f6d809db4c
   '@typescript-eslint/parser': 4.33.0_eslint@7.32.0+typescript@4.4.4
   eslint: 7.32.0
@@ -127,8 +133,33 @@ packages:
     resolution: {integrity: sha512-eZxlbI8GZscaGS7kkc/trHTT5xgrjH3/1n2JDwusC9iahPKWMRvRjJSAN5mCXviuTGQ/lHnhvv8Q1YTpnfz9gA==}
     dev: true
 
+  /@types/cookiejar/2.1.2:
+    resolution: {integrity: sha512-t73xJJrvdTjXrn4jLS9VSGRbz0nUY3cl2DMGDU48lKl+HR9dbbjW2A9r3g40VA++mQpy6uuHg33gy7du2BKpog==}
+    dev: true
+
   /@types/json-schema/7.0.9:
     resolution: {integrity: sha512-qcUXuemtEu+E5wZSJHNxUXeCZhAfXKQ41D+duX+VYPde7xyEVZci+/oXKJL13tnRs9lR2pr4fod59GT6/X1/yQ==}
+    dev: true
+
+  /@types/node/16.11.6:
+    resolution: {integrity: sha512-ua7PgUoeQFjmWPcoo9khiPum3Pd60k4/2ZGXt18sm2Slk0W0xZTqt5Y0Ny1NyBiN1EVQ/+FaF9NcY4Qe6rwk5w==}
+    dev: true
+
+  /@types/superagent-prefix/0.0.3:
+    resolution: {integrity: sha512-nJFHYy9ENB5HqhXQs1bp+nux2/us/nGBPhoDxbDgc5iBhmbhmITDVOMRdC85WIsrUm1ptR4Cv4llF2UblIq4pw==}
+    dependencies:
+      '@types/superagent': 4.1.13
+    dev: true
+
+  /@types/superagent/4.1.13:
+    resolution: {integrity: sha512-YIGelp3ZyMiH0/A09PMAORO0EBGlF5xIKfDpK74wdYvWUs2o96b5CItJcWPdH409b7SAXIIG6p8NdU/4U2Maww==}
+    dependencies:
+      '@types/cookiejar': 2.1.2
+      '@types/node': 16.11.6
+    dev: true
+
+  /@types/uuid/8.3.1:
+    resolution: {integrity: sha512-Y2mHTRAbqfFkpjldbkHGY8JIzRN6XqYRliG8/24FcHm2D2PwW24fl5xMRTVGdrb7iMrwCaIEbLWerGIkXuFWVg==}
     dev: true
 
   /@typescript-eslint/eslint-plugin/4.33.0_cc617358c89d3f38c52462f6d809db4c:
