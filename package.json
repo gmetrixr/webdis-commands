@@ -1,0 +1,36 @@
+{
+  "name": "webdis-commands",
+  "version": "0.0.0",
+  "main": "./lib/cjs/exports/index.js",
+  "module": "./lib/esm/exports/index.js",
+  "repository": "https://github.com/gmetrixr/webdis-commands",
+  "author": "Amit Rajput <amit@gmetri.com>",
+  "license": "UNLICENSED",
+  "sideEffects": false,
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "@comment TEST": "Useful for testing",
+    "check": "./node_modules/.bin/tsc --noEmit",
+    "lint": "./node_modules/.bin/eslint --ext \".ts,.tsx\" ./src ",
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' nyc mocha",
+    "test-debug": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha --inspect-brk=0.0.0.0:3601 --color true --timeout 999999",
+    "watch-test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -w",
+    "circular": "npx madge --circular --extensions ts src/index.ts",
+    "@comment PUBLISH": "Used for publishing this repo",
+    "build": "rm -rf lib; ./node_modules/.bin/tsc -p tsconfig.json && ./node_modules/.bin/tsc -p tsconfig-cjs.json"
+  },
+  "dependencies": {
+    "superagent": "^6.1.0",
+    "superagent-prefix": "^0.0.2"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.1.0",
+    "@typescript-eslint/parser": "^4.11.0",
+    "eslint": "^7.9.0",
+    "prettier": "^2.1.2",
+    "ts-node": "^10.2.0",
+    "typescript": "^4.3.5"
+  }
+}

@@ -1,0 +1,22 @@
+.git/
+.pnpm-store/
+node_modules/
+
+#For GOCD Builds:
+#short_ref needed in BUILD_VERSION
+#!.git/short_ref
+
+.idea/
+.vscode/
+
+data/
+build/
+cloud/
+
+# ESlint coverage files
+.coverage.eslint.codeframe
+dev/pgadmin4/.pgpass
+
+coverage/
+lib/
+.nyc_output/
