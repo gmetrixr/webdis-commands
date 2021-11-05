@@ -22,9 +22,11 @@
     "build": "rm -rf lib; ./node_modules/.bin/tsc -p tsconfig.json && ./node_modules/.bin/tsc -p tsconfig-cjs.json"
   },
   "dependencies": {
+    "chalk": "^4.1.2",
     "superagent": "^6.1.0",
     "superagent-prefix": "^0.0.2",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
     "@types/superagent": "^4.1.13",

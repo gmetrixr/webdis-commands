@@ -1,5 +1,8 @@
 // https://github.com/nicolasff/webdis#pubsub-with-chunked-transfer-encoding
-import {v4} from "uuid";
+import { v4 } from "uuid";
+// @ts-ignore
+import { XMLHttpRequest } from "xmlhttprequest";
+import chalk from "chalk";
 
 class Subscriber {
   private readonly url: string;
@@ -18,27 +21,46 @@ class Subscriber {
     this.xhr.send(null);
   }
 
-  onReadyStateChange() {
-    if(this.xhr.readyState === 3) {
+  onReadyStateChange(): void {
+    if (this.xhr.readyState === 3) {
       const response = this.xhr.responseText;
       const chunk = response.slice(this.prevResponseLength);
       this.prevResponseLength = response.length;
-      console.log(chunk);
-      // TODO: Fire all listeners
+      // Received CHUNK:  {"SUBSCRIBE":["message","test","{\"some_field\": \"some_value\"}"]}
+      try {
+        const parsedChunk = JSON.parse(chunk);
+        const isMessage = parsedChunk?.SUBSCRIBE?.[0] === "message";
+        if (isMessage) {
+          // data will be available in index = 2
+          for (const cb of Object.values(this.listeners)) {
+            /**
+             * callback always gets parsed data.
+             * callback function should always check the type of data it is receiving then do operations on it.
+             */
+            cb(parsedChunk?.SUBSCRIBE?.[2]);
+          }
+        }
+      } catch (e) {
+        console.error(chalk.red(`Unable to process received message`, chunk), chalk.red(e));
+      }
     }
   }
 
-  registerCb(cb: any) {
+  registerCb(cb: (args: any) => void): string {
     const uuid = v4();
     this.listeners[uuid] = cb;
     return uuid;
   }
 
-  unregisterCb(uuid: string) {
+  unregisterCb(uuid: string): void {
     delete this.listeners[uuid];
   }
 
-  destroy() {
+  destroy(): void {
+    console.log(chalk.green(`Destroying subscription: `, this.channel));
+    // empty the listeners
+    this.listeners = {};
+    // stop the xhr call
     this.xhr.abort();
   }
 }

@@ -1,5 +1,6 @@
 import request from "superagent";
 import prefix from "superagent-prefix";
+import chalk from "chalk";
 
 type Ok = "OK";
 const Ok = "OK";
@@ -26,7 +27,7 @@ class Commander {
       const res = await this.agent.post("/").send(command);
       return res.body;
     } catch (e) {
-      console.error(e);
+      console.error(chalk.red(e));
       return 0;
     }
   }
@@ -125,6 +126,17 @@ class Commander {
   async flushall(): Promise<any[] | null> {
     const res = await this.call(`FLUSHALL`);
     return res === 0? null: res.FLUSHALL;
+  }
+
+  // subscriptions
+  async publish(channel: string, message: string): Promise<any | null> {
+    const res = await this.call(`PUBLISH/${channel}/${message}`);
+    return res === 0? null: res.PUBLISH;
+  }
+
+  async unsubscribe(channel: string): Promise<void> {
+    const res = await this.call(`UNSUBSCRIBE/${channel}`);
+    return res === 0? null: res.UNSUBSCRIBE;
   }
 }
 

@@ -9,20 +9,20 @@ class Webdis {
 
   constructor(url: string, db?: number) {
     this.dbIndex = db;
-    this.prefixedUrl = this.dbIndex !== undefined? `${url}/${this.dbIndex}`: url;
+    this.prefixedUrl = this.dbIndex !== undefined ? `${url}/${this.dbIndex}` : url;
     this.commander = new Commander(url, db);
     this.subscriptions = {};
   }
 
-  command() {
+  command(): Commander {
     return this.commander;
   }
 
   // if found, then reuse and add a new listener
   // else create a new one
-  subscribe(channel: string, cb: any) {
+  subscribe(channel: string, cb: any): string {
     const subscription = this.subscriptions[channel];
-    if(subscription) {
+    if (subscription) {
       return subscription.registerCb(cb);
     } else {
       const subscriber = new Subscriber(this.prefixedUrl, channel);
@@ -31,21 +31,19 @@ class Webdis {
     }
   }
 
-  unsubscribe(channel: string, uuid: string) {
+  unsubscribe(channel: string, uuid: string): void {
     const subscription = this.subscriptions[channel];
-    if(subscription) {
+    if (subscription) {
       subscription.unregisterCb(uuid);
     } else {
       console.error(`No subscription found for channel: ${channel} and uuid: ${uuid}`);
     }
   }
 
-  async publish(channel: string, message: string) {
-
-  }
-
-  async quit(cb: any) {
-
+  async quit(): Promise<void> {
+    for(const sub of Object.values(this.subscriptions)) {
+      sub.destroy();
+    }
   }
 }
 
