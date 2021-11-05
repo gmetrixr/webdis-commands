@@ -1,5 +1,5 @@
 {
-  "name": "webdis-commands",
+  "name": "@gmetrixr/webdis-commands",
   "version": "0.0.0",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
@@ -19,7 +19,10 @@
     "watch-test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -w",
     "circular": "npx madge --circular --extensions ts src/index.ts",
     "@comment PUBLISH": "Used for publishing this repo",
-    "build": "rm -rf lib; ./node_modules/.bin/tsc -p tsconfig.json && ./node_modules/.bin/tsc -p tsconfig-cjs.json"
+    "build": "rm -rf lib; ./node_modules/.bin/tsc -p tsconfig.json && ./node_modules/.bin/tsc -p tsconfig-cjs.json",
+    "bundle": "pnpm publish:version && pnpm publish:npm",
+    "publish:version": "N=$(node -p \"require('./package.json').name\") && pnpm version patch --message \"v%s: $N [ci skip]\"",
+    "publish:npm": "V=$(node -p \"require('./package.json').version\") && pnpm publish --no-git-check"
   },
   "dependencies": {
     "chalk": "^4.1.2",
