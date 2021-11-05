@@ -1,16 +1,21 @@
 import Commander from "./commander";
 import Subscriber from "./subscriber";
 
+type Options = {
+  db?: number,
+  auth?: string
+};
+
 class Webdis {
   private readonly prefixedUrl: string;
   private readonly dbIndex?: number;
   private readonly commander: Commander;
   private subscriptions: Record<string, Subscriber>;
 
-  constructor(url: string, db?: number) {
-    this.dbIndex = db;
+  constructor(url: string, options: Options = {}) {
+    this.dbIndex = options.db;
     this.prefixedUrl = this.dbIndex !== undefined ? `${url}/${this.dbIndex}` : url;
-    this.commander = new Commander(url, db);
+    this.commander = new Commander(url, options);
     this.subscriptions = {};
   }
 
@@ -20,7 +25,7 @@ class Webdis {
 
   // if found, then reuse and add a new listener
   // else create a new one
-  subscribe(channel: string, cb: any): string {
+  subscribe(channel: string, cb: (arg: any) => void): string {
     const subscription = this.subscriptions[channel];
     if (subscription) {
       return subscription.registerCb(cb);

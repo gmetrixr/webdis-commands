@@ -5,16 +5,26 @@ import chalk from "chalk";
 type Ok = "OK";
 const Ok = "OK";
 
+type Options = {
+  db?: number,
+  auth?: string
+};
+
 class Commander {
   private readonly agent: request.SuperAgentStatic & request.Request;
   private db?: number;
-
-  constructor(url: string, db?: number) {
-    this.db = db;
+  private auth?: string[];
+  constructor(url: string, options: Options = {}) {
+    this.db = options.db;
     this.agent = request
       .agent()
       .use(prefix(url))
       .accept("json");
+
+    if(options.auth) {
+      // apply auth incase it's passed
+      this.auth = options.auth.split(":");
+    }
   }
 
   private makeCommand(command: string) {
@@ -24,7 +34,15 @@ class Commander {
   async call(url: string): Promise<any> {
     try {
       const command = this.makeCommand(url);
-      const res = await this.agent.post("/").send(command);
+      const res = this.auth?
+        await this.agent
+          .auth(this.auth[0], this.auth[1])
+          .post("/")
+          .send(command):
+        await this.agent
+          .post("/")
+          .send(command);
+
       return res.body;
     } catch (e) {
       console.error(chalk.red(e));
@@ -126,6 +144,11 @@ class Commander {
   async flushall(): Promise<any[] | null> {
     const res = await this.call(`FLUSHALL`);
     return res === 0? null: res.FLUSHALL;
+  }
+
+  async ping(): Promise<any | null> {
+    const res = await this.call(`PING`);
+    return res === 0? null: res.PING;
   }
 
   // subscriptions

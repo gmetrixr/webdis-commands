@@ -1,23 +1,48 @@
 version: "3"
 
 services:
-  help:
+  webdis-commands:
     image: "gmetrixr/baseimage:node-16-dev-v1"
     container_name: gmetri_webdis-commands
     command: ["tail", "-f", "/dev/null"]
     working_dir: /src
     user: node
     ports:
-      - "8001:8001" #Format: HOST:CONTAINER
+      - "8001:8080" #Format: HOST:CONTAINER
     volumes:
       - .:/src
-      #Allow running host to run git commands:
-      - ~/.ssh:/home/node/.ssh:ro
-      - ~/.gitconfig:/home/node/.gitconfig:ro
     environment:
       - IS_LOCAL=true
       - BUILD_VERSION=localversion
       - NAMESPACE=local
+
+  redis-commander:
+    container_name: gmetri_redis-commander
+    hostname: gmetri_redis-commander
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+      - REDIS_HOSTS=local:redis:6379:0
+    ports:
+      - "8002:8081"
+
+  redis:
+    image: redis:6.2-alpine
+    container_name: gmetri_redis
+    restart: always
+
+  webdis:
+    image: nicolas/webdis:latest
+    command: /usr/local/bin/webdis /config/webdis.json
+    container_name: gmetri_webdis
+    volumes: # mount volume containing the config files
+      - ./config:/config
+    environment:
+      - REDIS_HOST=redis
+    depends_on: # make sure Redis starts first, so that Webdis can connect to it without retries
+      - redis
+    ports: # allow connections from the Docker host on localhost, port 7379
+      - "8003:7379"
 
 networks:
   default:
