@@ -1,0 +1,17 @@
+# .drone.yml
+kind: pipeline
+type: docker
+name: default
+workspace:
+  path: /src
+trigger:
+  branch: [main]
+  event: [push]
+steps:
+- name: lint-and-build
+  image: gmetrixr/baseimage:node-16-dev-v1
+  commands:
+    - pnpm install
+    - pnpm lint
+    - pnpm check
+
