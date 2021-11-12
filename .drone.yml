@@ -11,6 +11,7 @@ steps:
 - name: lint-and-build
   image: gmetrixr/baseimage:node-16-dev-v1
   commands:
+    - sudo chown -R node .
     - pnpm install
     - pnpm lint
     - pnpm check
