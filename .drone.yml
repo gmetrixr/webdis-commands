@@ -6,7 +6,7 @@ workspace:
   path: /src
 trigger:
   branch: [main]
-  event: [push]
+  event: [push, pull_request]
 steps:
 - name: lint-and-build
   image: gmetrixr/baseimage:node-16-dev-v1

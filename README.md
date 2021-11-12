@@ -1,3 +1,5 @@
+[![Build Status](https://drone-xr.gmetri.io/api/badges/gmetrixr/webdis-commands/status.svg)](https://drone-xr.gmetri.io/gmetrixr/webdis-commands)
+
 # webdis-commands
 Client library for making webdis server requests
 
