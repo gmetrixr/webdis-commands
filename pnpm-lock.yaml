@@ -6,6 +6,7 @@ specifiers:
   '@types/uuid': ^8.3.1
   '@typescript-eslint/eslint-plugin': ^4.1.0
   '@typescript-eslint/parser': ^4.11.0
+  base-64: ^1.0.0
   chalk: ^4.1.2
   eslint: ^7.9.0
   prettier: ^2.1.2
@@ -17,6 +18,7 @@ specifiers:
   xmlhttprequest: ^1.8.0
 
 dependencies:
+  base-64: 1.0.0
   chalk: 4.1.2
   superagent: 6.1.0
   superagent-prefix: 0.0.2
@@ -365,6 +367,10 @@ packages:
   /balanced-match/1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
     dev: true
+
+  /base-64/1.0.0:
+    resolution: {integrity: sha512-kwDPIFCGx0NZHog36dj+tHiwP4QMzsZ3AgMViUBKI0+V5n4U0ufTCUMhnQ04diaRI8EX/QcPfql7zlhZ7j4zgg==}
+    dev: false
 
   /brace-expansion/1.1.11:
     resolution: {integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==}

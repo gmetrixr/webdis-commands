@@ -26,6 +26,7 @@
     "push:tags": "git push --tags"
   },
   "dependencies": {
+    "base-64": "^1.0.0",
     "chalk": "^4.1.2",
     "superagent": "^6.1.0",
     "superagent-prefix": "^0.0.2",
