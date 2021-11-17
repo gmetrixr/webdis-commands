@@ -3,6 +3,9 @@ import { v4 } from "uuid";
 // @ts-ignore
 import { XMLHttpRequest } from "xmlhttprequest";
 import chalk from "chalk";
+// @ts-ignore
+import base64 from "base-64";
+
 
 class Subscriber {
   private readonly url: string;
@@ -11,13 +14,16 @@ class Subscriber {
   private listeners: Record<string, any>;
   private channel: string;
 
-  constructor(url: string, channel: string) {
+  constructor(url: string, channel: string, auth?: string) {
     this.listeners = {};
     this.channel = channel;
     this.url = url;
     this.xhr = new XMLHttpRequest();
     this.xhr.addEventListener("readystatechange", () => this.onReadyStateChange());
     this.xhr.open("GET", `${this.url}/SUBSCRIBE/${this.channel}`);
+    if(auth) {
+      this.xhr.setRequestHeader("Authorization", "Basic " + base64.encode(auth));
+    }
     this.xhr.send(null);
   }
 

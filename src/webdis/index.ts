@@ -11,12 +11,14 @@ class Webdis {
   private readonly dbIndex?: number;
   private readonly commander: Commander;
   private subscriptions: Record<string, Subscriber>;
+  private options: Options;
 
   constructor(url: string, options: Options = {}) {
     this.dbIndex = options.db;
     this.prefixedUrl = this.dbIndex !== undefined ? `${url}/${this.dbIndex}` : url;
     this.commander = new Commander(url, options);
     this.subscriptions = {};
+    this.options = options;
   }
 
   command(): Commander {
@@ -30,7 +32,7 @@ class Webdis {
     if (subscription) {
       return subscription.registerCb(cb);
     } else {
-      const subscriber = new Subscriber(this.prefixedUrl, channel);
+      const subscriber = new Subscriber(this.prefixedUrl, channel, this.options.auth);
       this.subscriptions[channel] = subscriber;
       return subscriber.registerCb(cb);
     }
