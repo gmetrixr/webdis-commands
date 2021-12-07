@@ -14,8 +14,10 @@ class Commander {
   private readonly agent: request.SuperAgentStatic & request.Request;
   private db?: number;
   private auth?: string[];
+  private baseUrl: string;
   constructor(url: string, options: Options = {}) {
     this.db = options.db;
+    this.baseUrl = url;
     this.agent = request
       .agent()
       .use(prefix(url))
@@ -43,6 +45,28 @@ class Commander {
           .post("/")
           .send(command);
 
+      return res.body;
+    } catch (e) {
+      console.error(chalk.red(e));
+      return 0;
+    }
+  }
+
+  async callPut(url: string, payload: any): Promise<any> {
+    try {
+      const command = this.makeCommand(url);
+      const res = this.auth?
+        await request
+          .agent()
+          .auth(this.auth[0], this.auth[1])
+          .put(`${this.baseUrl}/${command}`)
+          .accept("json")
+          .send(payload):
+        await this.agent
+          .agent()
+          .put(`${this.baseUrl}/${command}`)
+          .accept("json")
+          .send(payload);
       return res.body;
     } catch (e) {
       console.error(chalk.red(e));
@@ -153,7 +177,7 @@ class Commander {
 
   // subscriptions
   async publish(channel: string, message: string): Promise<any | null> {
-    const res = await this.call(`PUBLISH/${channel}/${message}`);
+    const res = await this.callPut(`PUBLISH/${channel}`, message);
     return res === 0? null: res.PUBLISH;
   }
 
